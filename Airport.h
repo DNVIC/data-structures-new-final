@@ -6,8 +6,8 @@
 class Airport {
 public:
   Airport(std::string _airportCode, std::string _airportName);
-  const std::string &getAirportCode() const;
-  const std::string &getAirportName() const;
+  std::string getAirportCode() const;
+  std::string getAirportName() const;
   bool isVisited = false;
 
 private:

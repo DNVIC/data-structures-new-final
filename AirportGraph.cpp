@@ -47,7 +47,7 @@ void AirportGraph::addFlight(Airport *source, Airport *destination,
       new Flight(source, destination, distance, cost));
 }
 
-Airport *AirportGraph::getAirportByCode(const std::string &airportCode) {
+Airport *AirportGraph::getAirportByCode(std::string airportCode) {
   for (Airport *airport : airports) {
     if (airport->getAirportCode() == airportCode) {
       return airport;

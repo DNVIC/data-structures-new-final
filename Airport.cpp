@@ -8,6 +8,6 @@ Airport::Airport(std::string _airportCode, std::string _airportName) {
 }
 
 // Getter functions
-const std::string &Airport::getAirportCode() const { return airportCode; }
+std::string Airport::getAirportCode() const { return airportCode; }
 
-const std::string &Airport::getAirportName() const { return airportName; }
+std::string Airport::getAirportName() const { return airportName; }

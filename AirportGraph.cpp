@@ -108,49 +108,56 @@ int AirportGraph::get_shortest_path(Airport *src, Airport *dest) {
     airports[i]->isVisited = true;
     airports_visited++;
   }
+   clean_visited();
+  return distances[i_dest];
+}
+}
   void AirportGraph::countDirectConnections() {
-  // Task 5: Count direct flight connections to each airport
-  std::unordered_map<std::string, int> inboundCounts;
-  std::unordered_map<std::string, int> outboundCounts;
 
-  // Count inbound and outbound connections
+ std::vector<int> inboundCounts(airports.size(), 0);
+    std::vector<int> outboundCounts(airports.size(), 0);
+
+  
   for (const auto& flightList : flights) {
       for (const auto& flight : flightList) {
-          inboundCounts[flight->destination->getAirportCode()]++;
-          outboundCounts[flight->source->getAirportCode()]++;
-      }
+         Airport* source = flight->source;
+            Airport* destination = flight->destination;
+            int sourceIndex = get_airport_index(source);
+            int destinationIndex = get_airport_index(destination);
+            inboundCounts[destinationIndex]++;
+            inboundCounts[destinationIndex]++;
   }
-    // Calculate total connections
-        std::unordered_map<std::string, int> totalConnections;
-        for (const auto& airport : airports) {
-            std::string airportCode = airport->getAirportCode();
-            totalConnections[airportCode] = inboundCounts[airportCode] + outboundCounts[airportCode];
+  }
+        std::vector<std::pair<Airport*, int>> totalConnections;
+        for (size_t i = 0; i < airports.size(); ++i) {
+          int total = inboundCounts[i] + outboundCounts[i];
+          totalConnections.push_back({airports[i], total});
         }
 
-        // Sort airports based on total connections
-        std::sort(airports.begin(), airports.end(), [&](Airport*a , Airport* b) {
-            return totalConnections[a->getAirportCode()] > totalConnections[b->getAirportCode()];
+       
+        std::sort(totalConnections.begin(), totalConnections.end(),   [](const auto& a, const auto& b) { return a.second > b.second; });
+
+           
         });
 
-        // Display the result
-        for (const auto& airport : airports) {
-            std::string airportCode = airport->getAirportCode();
-            int total = totalConnections[airportCode];
-            int inbound = inboundCounts[airportCode];
-            int outbound = outboundCounts[airportCode];
-            std::cout << "Airport " << airportCode << ": Inbound - " << inbound
-                      << ", Outbound - " << outbound << ", Total - " << total << std::endl;
+        
+        for (const auto& [airport, total] :totalConnections) {
+   
+            int inbound = inboundCounts[get_airport_index(airport)];
+        int outbound = outboundCounts[get_airport_index(airport)];
+        std::cout << "Airport " << airport->getAirportCode() << ": Inbound - " << inbound
+                  << ", Outbound - " << outbound << ", Total - " << total << std::endl;
         }
     }
   void AirportGraph::createUndirectedGraph() {
-      // Iterate through each flight
+      
       for (const auto& flightList : flights) {
           for (const auto& flight : flightList) {
               Airport* source = flight->source;
               Airport* destination = flight->destination;
               int cost = flight->cost;
 
-              // Check if the reverse flight exists
+           
               bool reverseFlightExists = false;
               for (const auto& reverseFlight : flights[get_airport_index(destination)]) {
                   if (reverseFlight->source == destination && reverseFlight->destination == source) {
@@ -158,8 +165,6 @@ int AirportGraph::get_shortest_path(Airport *src, Airport *dest) {
                       break;
                   }
               }
-
-              // If reverse flight exists and its cost is lower, add it to the undirected graph
               if (reverseFlightExists) {
                   for (const auto& reverseFlight : flights[get_airport_index(destination)]) {
                       if (reverseFlight->source == destination && reverseFlight->destination == source &&
@@ -175,12 +180,7 @@ int AirportGraph::get_shortest_path(Airport *src, Airport *dest) {
                   flights[get_airport_index(destination)].push_back(reverseFlight);
               }
           }
-      }
-  }
-
-
-  clean_visited();
-  return distances[i_dest];
+   
 }
 
-}
+}`

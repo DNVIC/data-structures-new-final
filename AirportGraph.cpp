@@ -9,9 +9,10 @@ AirportGraph::~AirportGraph() {
   for (Airport *airport : airports) {
     delete airport;
   }
-  // for (Flight *flight : flights) {
-  //   delete flight;
-  // }
+   for (auto& *flightList : flights) {
+     for (Flight* flight : flightList) {
+      delete flight;
+   }
 }
 
 void AirportGraph::addFlight(Airport *source, Airport *destination,
@@ -71,6 +72,7 @@ void AirportGraph::clean_visited() {
   }
 }
 
+
 int AirportGraph::get_shortest_path(Airport *src, Airport *dest) {
   int i_src = get_airport_index(src);
   int i_dest = get_airport_index(dest);
@@ -100,11 +102,85 @@ int AirportGraph::get_shortest_path(Airport *src, Airport *dest) {
         }
       }
     }
+
     Flight f = heap.delete_min();
     cur_ver = get_airport_index(f.destination);
     airports[i]->isVisited = true;
     airports_visited++;
   }
+  void AirportGraph::countDirectConnections() {
+  // Task 5: Count direct flight connections to each airport
+  std::unordered_map<std::string, int> inboundCounts;
+  std::unordered_map<std::string, int> outboundCounts;
+
+  // Count inbound and outbound connections
+  for (const auto& flightList : flights) {
+      for (const auto& flight : flightList) {
+          inboundCounts[flight->destination->getAirportCode()]++;
+          outboundCounts[flight->source->getAirportCode()]++;
+      }
+  }
+    // Calculate total connections
+        std::unordered_map<std::string, int> totalConnections;
+        for (const auto& airport : airports) {
+            std::string airportCode = airport->getAirportCode();
+            totalConnections[airportCode] = inboundCounts[airportCode] + outboundCounts[airportCode];
+        }
+
+        // Sort airports based on total connections
+        std::sort(airports.begin(), airports.end(), [&](Airport*a , Airport* b) {
+            return totalConnections[a->getAirportCode()] > totalConnections[b->getAirportCode()];
+        });
+
+        // Display the result
+        for (const auto& airport : airports) {
+            std::string airportCode = airport->getAirportCode();
+            int total = totalConnections[airportCode];
+            int inbound = inboundCounts[airportCode];
+            int outbound = outboundCounts[airportCode];
+            std::cout << "Airport " << airportCode << ": Inbound - " << inbound
+                      << ", Outbound - " << outbound << ", Total - " << total << std::endl;
+        }
+    }
+  void AirportGraph::createUndirectedGraph() {
+      // Iterate through each flight
+      for (const auto& flightList : flights) {
+          for (const auto& flight : flightList) {
+              Airport* source = flight->source;
+              Airport* destination = flight->destination;
+              int cost = flight->cost;
+
+              // Check if the reverse flight exists
+              bool reverseFlightExists = false;
+              for (const auto& reverseFlight : flights[get_airport_index(destination)]) {
+                  if (reverseFlight->source == destination && reverseFlight->destination == source) {
+                      reverseFlightExists = true;
+                      break;
+                  }
+              }
+
+              // If reverse flight exists and its cost is lower, add it to the undirected graph
+              if (reverseFlightExists) {
+                  for (const auto& reverseFlight : flights[get_airport_index(destination)]) {
+                      if (reverseFlight->source == destination && reverseFlight->destination == source &&
+                          reverseFlight->cost < cost) {
+                          // Add the reverse flight with lower cost
+                          flights[get_airport_index(source)].push_back(reverseFlight);
+                          break;
+                      }
+                  }
+              } else {
+                  // If no reverse flight exists, add the current flight to the undirected graph
+                  Flight* reverseFlight = new Flight(destination, source, distance, cost);
+                  flights[get_airport_index(destination)].push_back(reverseFlight);
+              }
+          }
+      }
+  }
+
+
   clean_visited();
   return distances[i_dest];
+}
+
 }

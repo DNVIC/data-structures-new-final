@@ -9,6 +9,9 @@ public:
   Airport *getAirportByCode(const std::string &airportCode);
   int get_airport_index(Airport* airport);
   int get_shortest_path(Airport *src, Airport *dest);
+  void countDirectConnections();
+  void createUndirectedGraph();
+ 
   ~AirportGraph();
 
 private:

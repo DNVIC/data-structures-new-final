@@ -4,6 +4,7 @@
 #include <vector>
 #include "MinHeap.h"
 #include "MinHeap.cpp"
+#include <queue>
 
 AirportGraph::~AirportGraph() {
   for (Airport *airport : airports) {
@@ -30,24 +31,28 @@ void AirportGraph::addFlight(Airport *source, Airport *destination,
   case 0: {
     airports.push_back(source);
     std::vector<Flight *> tmp;
-    flights.push_back(tmp);
+    flights.push_back(tmp)
+    ;
+    break;
   }
   case 1: {
     airports.push_back(destination);
     std::vector<Flight *> tmp1;
     flights.push_back(tmp1);
-  } break;
+      break;
+  }
   case 2: {
     airports.push_back(source);
     std::vector<Flight *> tmp2;
     flights.push_back(tmp2);
-  } break;
+      break;
+  }
   }
   flights[get_airport_index(source)].push_back(
       new Flight(source, destination, distance, cost));
 }
 
-Airport *AirportGraph::getAirportByCode(std::string airportCode) {
+Airport *AirportGraph::getAirportByCode(const std::string& airportCode) {
   for (Airport *airport : airports) {
     if (airport->getAirportCode() == airportCode) {
       return airport;
@@ -64,7 +69,9 @@ int AirportGraph::get_airport_index(Airport *airport) {
   }
   return -1;
 }
+void PrimsAlgorithm() {
 
+}
 void AirportGraph::clean_visited() {
   for (Airport *airport : airports) {
     airport->isVisited = false;

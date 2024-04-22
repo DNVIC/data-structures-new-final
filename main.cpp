@@ -5,10 +5,12 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <queue>
+
 
 // Function to load airport data from a CSV file
 void loadAirportData(const std::string &filename, AirportGraph &graph) {
-  std::ifstream file(filename);
+  std::ifstream file("airports.csv");
   if (!file.is_open()) {
     std::cerr << "Error: Unable to open file " << filename << std::endl;
     return;

@@ -47,7 +47,7 @@ void AirportGraph::addFlight(Airport *source, Airport *destination, int distance
       new Flight(source, destination, distance, cost));
 }
 
-Airport *AirportGraph::getAirportByCode(const std::string& airportCode) {
+Airport *AirportGraph::getAirportByCode(std::string airportCode) {
   for (Airport *airport : airports) {
     if (airport->getAirportCode() == airportCode) {
       return airport;
@@ -64,42 +64,6 @@ int AirportGraph::get_airport_index(Airport *airport) {
   }
   return -1;
 }
-void AirportGraph::PrimsAlgorithm() {
-    std::priority_queue<pair<int, Airport*>, vector<pair<int, Airport*>>, greater<pair<int, Airport*>>> minHeap;
-    for (Airport* airport : airports) minHeap.push({INT_MAX, airport});
-
-    std::map<Airport*, int> cost;
-    for (Airport* airport : airports) cost[airport] = INT_MAX;
-
-    std::map<Airport*, bool> inMST;
-    for (Airport* airport : airports) inMST[airport] = false;
-
-    cost[airports[0]] = 0;
-    minHeap.push({0, airports[0]});
-
-    int total = 0;
-
-    while (!minHeap.empty()) {
-
-        Airport* u = minHeap.top().second;
-        minHeap.pop();
-
-        inMST[u] = true;
-        for (Flight* flight : flights[get_airport_index(u)]) {
-            Airport* v = flight->destination;
-            int weight = flight->cost;
-
-            if (inMST[v] == false && cost[v] > weight) {
-                cost[v] = weight;
-                minHeap.push({cost[v], v});
-                total += cost[v];
-            }
-        }
-    }
-    std::cout << "Total cost of MST: " << total << "\n";
-}
-
-void KruskalsAlgorithm(){
 
 template <typename T>
 std::vector<T> merge_sort(std::vector<T> input) {

@@ -11,8 +11,8 @@ public:
     distance = _dist;
     cost = _cost;
   }
-  bool operator>(const Flight &x) const { return distance > x.distance; }
-  bool operator<(const Flight &x) const { return distance < x.distance; }
+  bool operator>(const Flight &x) const { return cost > x.cost; }
+  bool operator<(const Flight &x) const { return cost < x.cost; }
   Airport *source;
   Airport *destination;
   int distance;

@@ -5,10 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/Assignment.dir/Airport.cpp.o.d"
   "CMakeFiles/Assignment.dir/AirportGraph.cpp.o"
   "CMakeFiles/Assignment.dir/AirportGraph.cpp.o.d"
-  "CMakeFiles/Assignment.dir/MST.cpp.o"
-  "CMakeFiles/Assignment.dir/MST.cpp.o.d"
-  "CMakeFiles/Assignment.dir/MinHeap.cpp.o"
-  "CMakeFiles/Assignment.dir/MinHeap.cpp.o.d"
+  "CMakeFiles/Assignment.dir/UndirectedAirportGraph.cpp.o"
+  "CMakeFiles/Assignment.dir/UndirectedAirportGraph.cpp.o.d"
   "CMakeFiles/Assignment.dir/main.cpp.o"
   "CMakeFiles/Assignment.dir/main.cpp.o.d"
 )

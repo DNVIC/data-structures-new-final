@@ -2,9 +2,41 @@
 #include "UndirectedAirportGraph.h"
 #include "Flight.h"
 #include <iostream>
-#include "Airport.h"
 #include <vector>
 #include <string>
+template <typename T>
+std::vector<T> merge_sort(std::vector<T> input) { // needs to be in header since template functions need to be defined in header for some reason
+    if(input.size() == 1) {
+        return input;
+    }
+    int index = input.size() / 2;
+    typename std::vector<T>::const_iterator mid = input.begin() + index; // if you're reading this, im aware these three lines are basically unreadable
+    typename std::vector<T> l((typename std::vector<T>::const_iterator)input.begin(), mid); //they were readable at one point but the compiler yelled at me
+    typename std::vector<T> r(mid, (typename std::vector<T>::const_iterator)input.end()); // so i needed to do a bunch of casting and typename shenanigans to shut it up
+    l = merge_sort(l);
+    r = merge_sort(r);
+    typename std::vector<T> output;
+    int li = 0;
+    int ri = 0;
+    while(ri < r.size()) {
+        T a = r[ri];
+        if(li == l.size()) {
+            output.push_back(a);
+            ri++;
+            continue;
+        }
+        if(l[li] > a) {
+            output.push_back(l[li]);
+            li++;
+        } else {
+            output.push_back(a);
+            ri++;
+        }
+    }
+    if(li != l.size())
+        output.insert(output.end(),l.begin() + li, l.end());
+    return output;
+}
 
 AirportGraph::~AirportGraph() {
   for (Airport *airport : airports) {
@@ -64,41 +96,6 @@ int AirportGraph::get_airport_index(Airport *airport) {
   }
   return -1;
 }
-
-template <typename T>
-std::vector<T> merge_sort(std::vector<T> input) {
-    if(input.size() == 1) {
-        return input;
-    }
-    int index = input.size() / 2;
-    typename std::vector<T>::const_iterator mid = input.begin() + index; // if you're reading this, im aware these three lines are basically unreadable
-    typename std::vector<T> l((typename std::vector<T>::const_iterator)input.begin(), mid); //they were readable at one point but the compiler yelled at me
-    typename std::vector<T> r(mid, (typename std::vector<T>::const_iterator)input.end()); // so i needed to do a bunch of casting and typename shenanigans to shut it up
-    l = merge_sort(l);
-    r = merge_sort(r);
-    typename std::vector<T> output;
-    int li = 0;
-    int ri = 0;
-    while(ri < r.size()) {
-        T a = r[ri];
-        if(li == l.size()) {
-            output.push_back(a);
-            ri++;
-            continue;
-        }
-        if(l[li] > a) {
-            output.push_back(l[li]);
-            li++;
-        } else {
-            output.push_back(a);
-            ri++;
-        }
-    }
-    if(li != l.size())
-        output.insert(output.end(),l.begin() + li, l.end());
-    return output;
-}
-
 
 void AirportGraph::recursiveHelper(std::vector<Airport*>& output, const std::vector<Airport*>& prev, int i) {
     if(prev[i] == nullptr) {

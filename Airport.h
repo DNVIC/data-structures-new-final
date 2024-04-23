@@ -8,6 +8,7 @@
 class Airport {
 public:
   Airport(std::string _airportCode, std::string _airportName);
+  Airport(Airport *a);
   std::string getAirportCode() const;
   std::string getAirportName() const;
 

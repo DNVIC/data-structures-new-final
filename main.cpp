@@ -1,5 +1,6 @@
 #include "Airport.h"
 #include "AirportGraph.h"
+#include "UndirectedAirportGraph.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -81,8 +82,8 @@ void loadAirportData(const std::string &filename, AirportGraph &graph) {
 
 int main() {
   AirportGraph graph;
-  loadAirportData("airports.txt", graph);
-  //std::cout << graph.getAirportByCode("ORD")->getAirportName();
+  loadAirportData("airports.csv", graph);
+  std::cout << graph.getAirportByCode("ORD")->getAirportName();
   graph.get_shortest_path(graph.getAirportByCode("IAD"),graph.getAirportByCode("MIA"));
   graph.get_shortest_path(graph.getAirportByCode("PIT"),graph.getAirportByCode("ACT"));
   graph.get_shortest_path_to_state(graph.getAirportByCode("ATL"), "FL");
@@ -90,5 +91,7 @@ int main() {
   graph.get_shortest_path_with_stops(graph.getAirportByCode("PIT"),graph.getAirportByCode("ACT"),2);
   graph.get_total_connections();
   UndirectedAirportGraph u_g(graph);
+  //u_g.print_prims_algorithm();
+  u_g.print_kruskals_algorithm();
   return 0;
 }

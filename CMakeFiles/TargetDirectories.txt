@@ -1,3 +1,3 @@
-/home/dnvic/Desktop/cppstuff/dsfinal/CMakeFiles/Assignment.dir
-/home/dnvic/Desktop/cppstuff/dsfinal/CMakeFiles/edit_cache.dir
-/home/dnvic/Desktop/cppstuff/dsfinal/CMakeFiles/rebuild_cache.dir
+/mnt/g/Desktop/dsfinal/CMakeFiles/Assignment.dir
+/mnt/g/Desktop/dsfinal/CMakeFiles/edit_cache.dir
+/mnt/g/Desktop/dsfinal/CMakeFiles/rebuild_cache.dir

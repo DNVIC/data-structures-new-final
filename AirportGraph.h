@@ -2,6 +2,9 @@
 #include "Airport.h"
 #include <unordered_map>
 #include <vector>
+#include <iostream>
+
+
 
 class al { // helper class, simple enough to keep in header
     public:
@@ -31,10 +34,10 @@ public:
   void get_shortest_path_with_stops(Airport *src, Airport *dest, int stops);
   void get_total_connections();
   ~AirportGraph();
-
-private:
   std::vector<Airport *> airports;
   std::vector<std::vector<Flight*>> flights;
+
+private:
   void recursiveHelper(std::vector<Airport*>& output, const std::vector<Airport*>& prev, int i);
   int recursiveHelper2(const std::vector<Airport*>& prev, int i);
   al depthFirstSearch(Airport *cur, Airport* target, int i);

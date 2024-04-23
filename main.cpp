@@ -30,13 +30,13 @@ void loadAirportData(const std::string &filename, AirportGraph &graph) {
     int start = 0;
     for (int i = 0; i < line.length(); i++) {
       char c = line.at(i);
-      if (c == '\n') {
-        break;
-      }
+      //if (c == '\n') {
+      //  break;
+      //}
       if(c == '\"') {
         inQuotes = !inQuotes;
       }
-      if (!inQuotes && c == ',') {
+      if (!inQuotes && (c == ',' || i == line.length() - 1)) {
         switch (index) {
           case 0:
             airportCode = line.substr(start, i - start);
@@ -59,7 +59,7 @@ void loadAirportData(const std::string &filename, AirportGraph &graph) {
             start = i + 1;
             break;
           case 5:
-            cost = std::stoi(line.substr(start, i - start));
+            cost = std::stoi(line.substr(start, i));
             start = i + 1;
             break;
         }
@@ -81,9 +81,14 @@ void loadAirportData(const std::string &filename, AirportGraph &graph) {
 
 int main() {
   AirportGraph graph;
-  loadAirportData("airports.csv", graph);
+  loadAirportData("airports.txt", graph);
   //std::cout << graph.getAirportByCode("ORD")->getAirportName();
-  std::cout << graph.get_shortest_path(graph.getAirportByCode("ORD"),graph.getAirportByCode("ATL"));
-
+  graph.get_shortest_path(graph.getAirportByCode("IAD"),graph.getAirportByCode("MIA"));
+  graph.get_shortest_path(graph.getAirportByCode("PIT"),graph.getAirportByCode("ACT"));
+  graph.get_shortest_path_to_state(graph.getAirportByCode("ATL"), "FL");
+  graph.get_shortest_path_with_stops(graph.getAirportByCode("IAD"),graph.getAirportByCode("MIA"),3);
+  graph.get_shortest_path_with_stops(graph.getAirportByCode("PIT"),graph.getAirportByCode("ACT"),2);
+  graph.get_total_connections();
+  UndirectedAirportGraph u_g(graph);
   return 0;
 }
